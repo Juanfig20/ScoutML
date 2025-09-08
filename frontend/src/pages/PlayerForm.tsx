@@ -167,7 +167,7 @@ export default function PlayerForm() {
 
   try {
     // Consiguir las predicciones del backend
-    const response = await fetch(API_URL, { method: 'POST', body: formData });
+    const response = await fetch(`${API_URL}/predictions/batch/`, { method: 'POST', body: formData });
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.error || "Error al procesar el archivo.");
@@ -399,7 +399,7 @@ export default function PlayerForm() {
       }
       
       // Obtener la predicción de la API
-       const predictionResponse = await fetch(API_URL, {
+       const predictionResponse = await fetch(`${API_URL}/predictions/single/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
