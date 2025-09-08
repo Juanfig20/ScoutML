@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-cvk=vh%4vqwq5+6kyxag%p)!_m0y5g%0i02$gx_s850@xr-3)4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False     # Cambiar a False en producción
 
-ALLOWED_HOSTS = ['https://scoutml.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
