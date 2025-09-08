@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { User, Mail, Save, Crown, CreditCard, X } from 'lucide-react';
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL;
 const API_BASE_URL = 'http://127.0.0.1:8000/api/users';
 const BILLING_API_URL = 'http://127.0.0.1:8000/api/billing';
 
@@ -83,7 +84,7 @@ export const Profile = () => {
       };
 
       
-      await axios.post(`${API_BASE_URL}/profile/`, payload);
+      await axios.post(`${API_URL}/profile/`, payload);
 
       toast({
         title: "Perfil actualizado",
@@ -124,7 +125,7 @@ export const Profile = () => {
 
     setIsCancelling(true);
     try {
-        const response = await fetch(`${BILLING_API_URL}/cancel-subscription/`, {
+        const response = await fetch(`${API_URL}/cancel-subscription/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userID: user.user_id }),

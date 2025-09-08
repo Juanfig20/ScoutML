@@ -45,13 +45,21 @@ INSTALLED_APPS = [
     'corsheaders', 
     'backend.billing.apps.BillingConfig',
 ]
+ 
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://localhost:8080",
-    "http://127.0.0.1:8000",
-    # Puedes añadir otros orígenes si son necesarios en el futuro, como el de producción
-]
+# Lee la variable de entorno que contendrá las URLs de producción
+allowed_origins_str = os.environ.get('CORS_ALLOWED_ORIGINS', '')
+
+# Crea la lista a partir de la variable, separando por comas si hay varias
+CORS_ALLOWED_ORIGINS = allowed_origins_str.split(',') if allowed_origins_str else []
+
+# En modo DEBUG, añade las URLs locales para que puedas seguir desarrollando
+if DEBUG:
+    CORS_ALLOWED_ORIGINS.extend([
+        "http://localhost:5173",
+        "http://localhost:8080",
+        "http://127.0.0.1:8000",
+    ])
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -141,4 +149,4 @@ SUPABASE_URL = os.getenv('SUPABASE_URL')
 SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 PAYPAL_CLIENT_ID = os.getenv('PAYPAL_CLIENT_ID')
 PAYPAL_CLIENT_SECRET = os.getenv('PAYPAL_CLIENT_SECRET')
-PAYPAL_MODE = 'sandbox'  # Cambia a 'live' en producción
+PAYPAL_MODE = 'live'  # Cambia a 'live' en producción sin es sandbox

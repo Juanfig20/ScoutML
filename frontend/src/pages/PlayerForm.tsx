@@ -13,6 +13,7 @@ import { buttonVariants } from '@/components/ui/button-variants';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 
+
 type Player = {
   id: string;
   name: string;
@@ -70,7 +71,7 @@ type CalculatedStats = {
 };
 
 // API del backend para la predicción
-const API_URL = 'http://127.0.0.1:8000/api/predict/';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function PlayerForm() {
   const [position, setPosition] = useState<'batter' | 'pitcher'>('batter');
