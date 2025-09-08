@@ -1,0 +1,68 @@
+# --------------------
+# Reglas para el Frontend (React + Vite)
+# --------------------
+
+# Directorios de dependencias
+/frontend/node_modules/
+
+# Archivos de build y cache
+/frontend/dist/
+/frontend/dist-ssr/
+/frontend/build/
+
+# Archivos de logs
+/frontend/logs
+/frontend/*.log
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*
+/frontend/pnpm-debug.log*
+/frontend/lerna-debug.log*
+
+# Archivos de entorno y configuraciones locales
+/frontend/.env
+/frontend/.env.local
+/frontend/*.local
+/frontend/.vscode/*
+!/frontend/.vscode/extensions.json
+
+# --------------------
+# Reglas para el Backend (Django)
+# --------------------
+
+# Archivos de python compilados
+/backend/__pycache__/
+/backend/predictions/__pycache__/
+/backend/*.py[cod]
+/backend/*$py.class
+
+# Bases de datos y archivos de cache
+/backend/db.sqlite3
+/backend/.cache/
+
+# Archivos de entornos virtuales
+/backend/.env
+/backend/env/
+
+# Directorios de archivos subidos y estáticos
+/backend/media/
+/backend/static_cdn/
+
+# --------------------
+# Reglas generales del proyecto
+# --------------------
+
+# Archivos en la raíz del proyecto
+venv/
+.env
+db.sqlite3
+
+# Directorios y archivos de editores (VS Code, etc.)
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
