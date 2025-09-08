@@ -1,0 +1,21 @@
+# Ignorar archivos del sistema de control de versiones
+.git
+.github
+
+# Ignorar archivos y carpetas del entorno de Node.js
+node_modules
+
+# Ignorar la caché de Python y entornos virtuales
+__pycache__/
+*.pyc
+.venv
+venv
+env
+
+# Ignorar archivos de configuración local
+.env
+.env.*
+local_settings.py
+
+# Ignorar archivos de SQLite (si los usas en desarrollo)
+*.sqlite3
