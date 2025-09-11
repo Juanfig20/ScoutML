@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from supabase import create_client
+from datetime import datetime
 
 class AuthView(APIView):
     def post(self, request, *args, **kwargs):
@@ -88,3 +89,40 @@ class LoginView(APIView):
             error_message = getattr(e, 'message', str(e))
             return Response({"error": error_message}, status=status.HTTP_401_UNAUTHORIZED)
         
+class ProfileView(APIView):
+    def post(self, request, *args, **kwargs):
+        supabase_admin = create_client(
+            os.getenv('SUPABASE_URL'), 
+            os.getenv('SUPABASE_KEY') 
+        )
+
+        user_id = request.data.get('user_id')
+        if not user_id:
+            return Response({"error": "Falta el user_id"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Datos para actualizar en la tabla 'profiles'
+        profile_data = {
+            "first_name": request.data.get('first_name'),
+            "last_name": request.data.get('last_name'),
+            "updated_at": datetime.now().isoformat()
+        }
+        # Filtra valores nulos para no sobreescribir con nada
+        profile_data = {k: v for k, v in profile_data.items() if v is not None}
+
+        try:
+            # Actualiza la tabla de perfiles
+            if profile_data:
+                update_response = supabase_admin.table("profiles").update(profile_data).eq("user_id", user_id).execute()
+                if not update_response.data:
+                    raise Exception("No se pudo actualizar el perfil.")
+            
+            # Actualiza la contraseña si se proporcionó una nueva
+            new_password = request.data.get('new_password')
+            if new_password:
+                supabase_admin.auth.admin.update_user_by_id(user_id, {'password': new_password})
+
+            return Response({"message": "Perfil actualizado exitosamente"}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            error_message = getattr(e, 'message', str(e))
+            return Response({"error": error_message}, status=status.HTTP_400_BAD_REQUEST)
