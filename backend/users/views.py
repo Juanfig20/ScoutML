@@ -109,17 +109,29 @@ class ProfileView(APIView):
         # Filtra valores nulos para no sobreescribir con nada
         profile_data = {k: v for k, v in profile_data.items() if v is not None}
 
+        new_email = request.data.get('email')
+        new_password = request.data.get('new_password')
+
         try:
-            # Actualiza la tabla de perfiles
+            # Primero, actualiza el email y la contraseña en Supabase Auth
+            auth_updates = {}
+            if new_email:
+                auth_updates['email'] = new_email
+            if new_password:
+                auth_updates['password'] = new_password
+            
+            if auth_updates:
+                supabase_admin.auth.admin.update_user_by_id(user_id, auth_updates)
+
+            # Si se cambió el email, actualízalo también en la tabla 'profiles'
+            if new_email:
+                profile_data['email'] = new_email
+            
+            # Actualiza la tabla de perfiles con todos los cambios
             if profile_data:
                 update_response = supabase_admin.table("profiles").update(profile_data).eq("user_id", user_id).execute()
                 if not update_response.data:
                     raise Exception("No se pudo actualizar el perfil.")
-            
-            # Actualiza la contraseña si se proporcionó una nueva
-            new_password = request.data.get('new_password')
-            if new_password:
-                supabase_admin.auth.admin.update_user_by_id(user_id, {'password': new_password})
 
             return Response({"message": "Perfil actualizado exitosamente"}, status=status.HTTP_200_OK)
 

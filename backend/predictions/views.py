@@ -14,7 +14,7 @@ PLAN_LIMITS = {
   'gratis': 1,
   'basico': 10,
   'medio': 20,
-  'avanzado': 40, 
+  'avanzado': 500, 
 }
 
 class ProspectPredictionView(APIView): 
