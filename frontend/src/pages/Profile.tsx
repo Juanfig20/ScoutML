@@ -84,7 +84,7 @@ export const Profile = () => {
       };
 
       
-      await axios.post(`${API_URL}/api/users/profile/`, payload);
+      await axios.post(`${API_URL}/users/profile/`, payload);
 
       toast({
         title: "Perfil actualizado",
@@ -125,7 +125,7 @@ export const Profile = () => {
 
     setIsCancelling(true);
     try {
-        const response = await fetch(`${API_URL}/api/billing/cancel-subscription/`, {
+        const response = await fetch(`${API_URL}/billing/cancel-subscription/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userID: user.user_id }),
