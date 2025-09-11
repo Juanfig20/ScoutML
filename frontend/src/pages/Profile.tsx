@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// 1. Importa 'useNavigate' para poder redirigir al usuario
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
