@@ -140,15 +140,25 @@ def player_file(file_path: str, file_type: str = 'csv') -> list:
       else:
         player['OPS'] = player['OBP'] + player['SLG']
         
-      player['K%'] = (SO / AB) * 100 if AB > 0 else 0
-      player['BB/K'] = BB / SO if SO > 0 else 0
+      if mapped_columns.get('K%') and pd.notna(row.get(mapped_columns.get('K%'))):
+        player['K%'] = row.get(mapped_columns.get('K%'))
+      else:
+        player['K%'] = (SO / AB) * 100 if AB > 0 else 0
+      
+      if mapped_columns.get('BB/K') and pd.notna(row.get(mapped_columns.get('BB/K'))):
+        player['BB/K'] = row.get(mapped_columns.get('BB/K'))
+      else:
+        player['BB/K'] = BB / SO if SO > 0 else 0
       
       if mapped_columns.get('FPCT') and pd.notna(row.get(mapped_columns.get('FPCT'))):
         player['FPCT'] = row.get(mapped_columns.get('FPCT'))
       else:
         player['FPCT'] = (PO + A) / (PO + A + E) if (PO + A + E) > 0 else 0
         
-      player['RF'] = (PO + A) / G if G > 0 else 0
+      if mapped_columns.get('RF') and pd.notna(row.get(mapped_columns.get('RF'))):
+        player['RF'] = row.get(mapped_columns.get('RF'))
+      else:      
+        player['RF'] = (PO + A) / G if G > 0 else 0
 
     elif has_pitching_stats and not has_batting_stats:
       player['position'] = 'pitcher'
@@ -179,16 +189,30 @@ def player_file(file_path: str, file_type: str = 'csv') -> list:
       else:
         player['WHIP'] = (BB + H) / IP if IP > 0 else 0
 
-      player['K/9'] = (SO * 9) / IP if IP > 0 else 0
-      player['BB/9'] = (BB * 9) / IP if IP > 0 else 0
-      player['K/BB'] = SO / BB if BB > 0 else 0
+      if mapped_columns.get('K/9') and pd.notna(row.get(mapped_columns.get('K/9'))):
+        player['K/9'] = row.get(mapped_columns.get('K/9'))
+      else:        
+        player['K/9'] = (SO * 9) / IP if IP > 0 else 0
+        
+      if mapped_columns.get('BB/9') and pd.notna(row.get(mapped_columns.get('BB/9'))):
+        player['BB/9'] = row.get(mapped_columns.get('BB/9'))
+      else:        
+        player['BB/9'] = (BB * 9) / IP if IP > 0 else 0
+        
+      if mapped_columns.get('K/BB') and pd.notna(row.get(mapped_columns.get('K/BB'))):
+        player['K/BB'] = row.get(mapped_columns.get('K/BB'))
+      else:
+        player['K/BB'] = SO / BB if BB > 0 else 0
       
       if mapped_columns.get('FPCT') and pd.notna(row.get(mapped_columns.get('FPCT'))):
         player['FPCT'] = row.get(mapped_columns.get('FPCT'))
       else:
         player['FPCT'] = (PO + A) / (PO + A + E) if (PO + A + E) > 0 else 0
         
-      player['RF'] = (PO + A) / G if G > 0 else 0
+      if mapped_columns.get('RF') and pd.notna(row.get(mapped_columns.get('RF'))):
+        player['RF'] = row.get(mapped_columns.get('RF'))
+      else:      
+        player['RF'] = (PO + A) / G if G > 0 else 0
       
     else:
       player['position'] = 'unknown'
