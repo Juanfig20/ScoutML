@@ -14,42 +14,42 @@ BATTER_DATASET_URL = "https://cbapxmchljrtvfiqozoy.supabase.co/storage/v1/object
 
 # FUNCIÓN  PARA DESCARGAR Y CARGAR MODELOS
 def load_pipeline_from_url(url: str):
-    """Descarga un pipeline de modelo (.pkl) desde una URL y lo carga."""
-    print(f"Descargando pipeline desde {url}...")
-    try:
-        response = requests.get(url)
-        # Esto lanzará un error si la URL no es válida o la descarga falla
-        response.raise_for_status()
-        # Carga el pipeline directamente desde los bytes descargados
-        pipeline = joblib.load(BytesIO(response.content))
-        print("Pipeline cargado exitosamente.")
-        return pipeline
-    except Exception as e:
-        raise RuntimeError(f"Error al cargar el pipeline desde {url}: {e}")
+  """Descarga un pipeline de modelo (.pkl) desde una URL y lo carga."""
+  print(f"Descargando pipeline desde {url}...")
+  try:
+    response = requests.get(url)
+    # Esto lanzará un error si la URL no es válida o la descarga falla
+    response.raise_for_status()
+    # Carga el pipeline directamente desde los bytes descargados
+    pipeline = joblib.load(BytesIO(response.content))
+    print("Pipeline cargado exitosamente.")
+    return pipeline
+  except Exception as e:
+    raise RuntimeError(f"Error al cargar el pipeline desde {url}: {e}")
 
 #  CARGA DE MODELOS Y DATASETS
 try:
-    # Carga de Pitchers
-    pitcher_pipeline = load_pipeline_from_url(PITCHER_MODEL_URL)
-    pitcher_model = pitcher_pipeline['model']
-    pitcher_scaler = pitcher_pipeline['scaler']
-    pitcher_features = pitcher_pipeline['features']
-    print(f"Descargando dataset de pitchers desde {PITCHER_DATASET_URL}...")
-    pitcher_dataset = pd.read_csv(PITCHER_DATASET_URL)
-    print("Dataset de pitchers cargado.")
+  # Carga de Pitchers
+  pitcher_pipeline = load_pipeline_from_url(PITCHER_MODEL_URL)
+  pitcher_model = pitcher_pipeline['model']
+  pitcher_scaler = pitcher_pipeline['scaler']
+  pitcher_features = pitcher_pipeline['features']
+  print(f"Descargando dataset de pitchers desde {PITCHER_DATASET_URL}...")
+  pitcher_dataset = pd.read_csv(PITCHER_DATASET_URL)
+  print("Dataset de pitchers cargado.")
 
-    # Carga de Bateadores
-    batter_pipeline = load_pipeline_from_url(BATTER_MODEL_URL)
-    batter_model = batter_pipeline['model']
-    batter_scaler = batter_pipeline['scaler']
-    batter_features = batter_pipeline['features']
-    print(f"Descargando dataset de bateadores desde {BATTER_DATASET_URL}...")
-    batter_dataset = pd.read_csv(BATTER_DATASET_URL)
-    print("Dataset de bateadores cargado.")
+  # Carga de Bateadores
+  batter_pipeline = load_pipeline_from_url(BATTER_MODEL_URL)
+  batter_model = batter_pipeline['model']
+  batter_scaler = batter_pipeline['scaler']
+  batter_features = batter_pipeline['features']
+  print(f"Descargando dataset de bateadores desde {BATTER_DATASET_URL}...")
+  batter_dataset = pd.read_csv(BATTER_DATASET_URL)
+  print("Dataset de bateadores cargado.")
 
 except RuntimeError as e:
-    # Si algo falla (la descarga, la carga), el programa se detendrá con un error claro.
-    raise e
+  # Si algo falla (la descarga, la carga), el programa se detendrá con un error claro.
+  raise e
 
 #Constantes de Métricas
 metricas_invertidas_p = ['ERA', 'WHIP', 'BB/9']
@@ -59,6 +59,8 @@ pesos_pitcheo = {'ERA': 0.20, 'WHIP': 0.25, 'K/9': 0.20, 'BB/9': 0.15, 'K/BB': 0
 
 # Genera un reporte completo para un solo jugador
 def single(player_data, player_type, plan='gratis'):
+  UMBRAL = 0.7
+  
   if player_type == 'pitcher':
     model, scaler, features, dataset, metricas_invertidas, pesos = \
     pitcher_model, pitcher_scaler, pitcher_features, pitcher_dataset, metricas_invertidas_p, pesos_pitcheo
@@ -77,8 +79,8 @@ def single(player_data, player_type, plan='gratis'):
     return {"error": f"Falta la métrica requerida: {str(e)}"}
 
   # 1. Booleano de Prospecto y Probabilidad
-  is_prospect = bool(model.predict(player_scaled)[0])
   prospect_percentage = model.predict_proba(player_scaled)[0][1]
+  is_prospect = bool(prospect_percentage >= UMBRAL)
 
   # 2. Percentiles, Fortalezas y Debilidades
   percentiles, fortalezas, mejoras = {}, [], []
