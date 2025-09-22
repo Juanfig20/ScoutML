@@ -128,9 +128,15 @@ const getRatingInfo = (isProspect: boolean, ranking: number | undefined) => {
   let textColorClass = 'text-yellow-600';
 
   if (!isProspect) {
-    text = 'Bajo rendimiento';
-    badgeColorClass = 'bg-red-500 text-white';
-    textColorClass = 'text-red-600';
+    if (rank >= 50 && rank < 70) {
+      text = 'Potencial de mejora';
+      badgeColorClass = 'bg-orange-500 text-white';
+      textColorClass = 'text-orange-600';
+    } else {
+      text = 'Bajo rendimiento';
+      badgeColorClass = 'bg-red-500 text-white';
+      textColorClass = 'text-red-600';
+    }
   } else {
     if (rank >= 85) {
       text = 'Gran potencial';
